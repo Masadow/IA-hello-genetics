@@ -10,6 +10,7 @@ class Population
     
     private var data : Array<Member>;
     private var it : Int;
+    public var log : Bool; //Enable logging
 
     public function new(l : Int, wl : Int, ascii : Bool) 
     {
@@ -28,13 +29,16 @@ class Population
     }
     
     public function show(conclude : Bool) {
-        Sys.println("Iteration: "+it+++"\n");
-        var i = 1;
-        for (m in data) {
-            Sys.println("\tid : " + i++);
-            Sys.println("\tname : " + m.string);
-            Sys.println("\tfitness : " + m.fitness);
-            Sys.println("");
+        it++;
+        if (log) {
+            Sys.println("Iteration: "+it+"\n");
+            var i = 1;
+            for (m in data) {
+                Sys.println("\tid : " + i++);
+                Sys.println("\tname : " + m.string);
+                Sys.println("\tfitness : " + m.fitness);
+                Sys.println("");
+            }
         }
         if (conclude)
             Sys.println("Target found in " + (it - 1) + " iterations.");
@@ -70,10 +74,12 @@ class Population
                     break ;
                 }
             }
-            Sys.println("\tCrossover : \n\t\t" + m1.string + "\n\t\t" + m2.string);
+            if (log)
+                Sys.println("\tCrossover : \n\t\t" + m1.string + "\n\t\t" + m2.string);
             var nm = Member.crossover(m1, m2);
             nextGen.push(nm);
-            Sys.println("\t\t= " + nm.string);
+            if (log)
+                Sys.println("\t\t= " + nm.string);
         }
         //Update the new generation
         data = data.splice(0, selection).concat(nextGen);
@@ -86,9 +92,11 @@ class Population
             if (--selection > 0)
                 continue;
             if (Math.random() < prob) {
-                Sys.println("\tMutation : \n\t\t" + m.string);
+                if (log)
+                    Sys.println("\tMutation : \n\t\t" + m.string);
                 m.mutate();
-                Sys.println("\t\t= " + m.string);
+                if (log)
+                    Sys.println("\t\t= " + m.string);
             }
         }
     }

@@ -22,7 +22,11 @@ class Main
 	{
 		var pop = new Population(LENGTH, TARGET.length, ASCII);
 
+
+        pop.log = false;
+
         pop.evaluate(TARGET);
+        
 
         var stop = 1000;
         while (!pop.rank(TARGET) && --stop > 0) {
